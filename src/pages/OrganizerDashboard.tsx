@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -50,6 +49,22 @@ import {
   TabsTrigger,
 } from '@/components/ui/tabs';
 
+// Add the correct Event interface for this file
+interface Event {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  location: string;
+  price: number;
+  ticketLimit: number;
+  image: string;
+  ticketsSold: number;
+  approved: boolean;
+  organizerId: string;
+  organizerName: string;
+}
+
 const OrganizerDashboard = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
@@ -62,10 +77,10 @@ const OrganizerDashboard = () => {
   const [currentEvent, setCurrentEvent] = useState<Event | null>(null);
   const [eventToDelete, setEventToDelete] = useState<string | null>(null);
   
-  // If not authenticated or not an organizer, redirect to login
+  // When not authenticated or not an organizer, redirect to events page
   React.useEffect(() => {
     if (!isAuthenticated || (user && user.role !== 'organizer')) {
-      navigate('/login');
+      navigate('/');
     }
   }, [isAuthenticated, user, navigate]);
   
@@ -73,16 +88,21 @@ const OrganizerDashboard = () => {
     return null; // Will redirect via useEffect
   }
   
-  // Filter events for this organizer
+  // Show all events for this organizer, not just approved
   const organizerEvents = events.filter(event => event.organizerId === user.id);
   
   const handleCreateEvent = (data: EventFormValues) => {
     createEvent({
-      ...data,
+      title: data.title,
+      description: data.description,
+      date: data.date instanceof Date ? data.date.toISOString() : data.date,
+      location: data.location,
+      price: data.price,
+      ticketLimit: data.ticketLimit,
+      image: data.image,
       organizerId: user.id,
       organizerName: user.name,
     });
-    
     setIsCreatingEvent(false);
     toast({
       title: 'Event created',
@@ -91,8 +111,16 @@ const OrganizerDashboard = () => {
   };
   
   const handleEditEvent = (data: EventFormValues) => {
-    if (currentEvent) {
-      updateEvent(currentEvent.id, data);
+    if (currentEvent) {  
+      updateEvent(currentEvent.id, {
+        title: data.title,
+        description: data.description,
+        date: data.date instanceof Date ? data.date.toISOString() : data.date,
+        location: data.location,
+        price: data.price,
+        ticketLimit: data.ticketLimit,
+        image: data.image,
+      });
       setIsEditingEvent(false);
       toast({
         title: 'Event updated',
@@ -102,17 +130,19 @@ const OrganizerDashboard = () => {
   };
   
   const confirmDeleteEvent = (eventId: string) => {
+    console.log('confirmDeleteEvent called with:', eventId);
+    window.alert('confirmDeleteEvent called with: ' + eventId);
     setEventToDelete(eventId);
   };
   
   const handleDeleteEvent = () => {
     if (eventToDelete) {
-      deleteEvent(eventToDelete);
+      window.alert('Deleting event with id: ' + eventToDelete);
+      fetch(`/api/events/${eventToDelete}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => window.alert('Backend response: ' + JSON.stringify(data)))
+        .catch(err => window.alert('Backend error: ' + err));
       setEventToDelete(null);
-      toast({
-        title: 'Event deleted',
-        description: 'Your event has been deleted successfully.',
-      });
     }
   };
   
@@ -215,17 +245,10 @@ const OrganizerDashboard = () => {
                             variant="ghost"
                             size="sm"
                             onClick={() => {
-                              setCurrentEvent(event);
-                              setIsEditingEvent(true);
+                              console.log('Delete button clicked for event:', event.id);
+                              window.alert('Delete button clicked for event: ' + event.id);
+                              confirmDeleteEvent(event.id);
                             }}
-                          >
-                            <Edit className="h-4 w-4" />
-                            <span className="sr-only">Edit</span>
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => confirmDeleteEvent(event.id)}
                           >
                             <Trash className="h-4 w-4" />
                             <span className="sr-only">Delete</span>

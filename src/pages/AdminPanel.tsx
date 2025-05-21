@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -40,10 +39,10 @@ const AdminPanel = () => {
   const { tickets } = useTickets();
   const { toast } = useToast();
   
-  // If not authenticated or not an admin, redirect to login
+  // If not authenticated or not an admin, redirect to events/home
   React.useEffect(() => {
     if (!isAuthenticated || (user && user.role !== 'admin')) {
-      navigate('/login');
+      navigate('/'); // Redirect to events/home instead of login
     }
   }, [isAuthenticated, user, navigate]);
   

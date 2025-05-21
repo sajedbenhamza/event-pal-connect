@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Search } from 'lucide-react';
@@ -41,10 +40,11 @@ const Index = () => {
         return a.price - b.price;
       case 'price-high':
         return b.price - a.price;
-      case 'availability':
+      case 'availability': {
         const aRemaining = a.ticketLimit - a.ticketsSold;
         const bRemaining = b.ticketLimit - b.ticketsSold;
         return bRemaining - aRemaining;
+      }
       default:
         return 0;
     }
@@ -67,7 +67,7 @@ const Index = () => {
                 <Button size="lg" asChild className="bg-white text-primary hover:bg-white/90">
                   <a href="#events">Browse Events</a>
                 </Button>
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/20" asChild>
+                <Button size="lg" variant="outline" className="border-white text-primary hover:bg-white/20" asChild>
                   <Link to="/register">Create Account</Link>
                 </Button>
               </div>

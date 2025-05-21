@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -77,9 +76,9 @@ const EventForm: React.FC<EventFormProps> = ({
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Event Title</FormLabel>
+              <FormLabel htmlFor="event-title">Event Title</FormLabel>
               <FormControl>
-                <Input placeholder="Enter event title" {...field} />
+                <Input id="event-title" placeholder="Enter event title" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -91,9 +90,10 @@ const EventForm: React.FC<EventFormProps> = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Event Description</FormLabel>
+              <FormLabel htmlFor="event-description">Event Description</FormLabel>
               <FormControl>
                 <Textarea
+                  id="event-description"
                   placeholder="Describe your event"
                   className="min-h-[120px]"
                   {...field}
@@ -110,12 +110,13 @@ const EventForm: React.FC<EventFormProps> = ({
             name="date"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel>Event Date & Time</FormLabel>
+                <FormLabel htmlFor="event-date">Event Date & Time</FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
                       <Button
                         variant="outline"
+                        id="event-date"
                         className={cn(
                           "w-full pl-3 text-left font-normal",
                           !field.value && "text-muted-foreground"
@@ -162,9 +163,9 @@ const EventForm: React.FC<EventFormProps> = ({
             name="location"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Event Location</FormLabel>
+                <FormLabel htmlFor="event-location">Event Location</FormLabel>
                 <FormControl>
-                  <Input placeholder="Enter event location" {...field} />
+                  <Input id="event-location" placeholder="Enter event location" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -178,9 +179,9 @@ const EventForm: React.FC<EventFormProps> = ({
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ticket Price ($)</FormLabel>
+                <FormLabel htmlFor="event-price">Ticket Price ($)</FormLabel>
                 <FormControl>
-                  <Input type="number" min="0" step="0.01" {...field} />
+                  <Input id="event-price" type="number" min="0" step="0.01" {...field} />
                 </FormControl>
                 <FormDescription>Set to 0 for free events</FormDescription>
                 <FormMessage />
@@ -193,9 +194,9 @@ const EventForm: React.FC<EventFormProps> = ({
             name="ticketLimit"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Ticket Limit</FormLabel>
+                <FormLabel htmlFor="event-ticket-limit">Ticket Limit</FormLabel>
                 <FormControl>
-                  <Input type="number" min="1" {...field} />
+                  <Input id="event-ticket-limit" type="number" min="1" {...field} />
                 </FormControl>
                 <FormDescription>Maximum number of tickets available</FormDescription>
                 <FormMessage />
@@ -209,9 +210,9 @@ const EventForm: React.FC<EventFormProps> = ({
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Event Image URL</FormLabel>
+              <FormLabel htmlFor="event-image">Event Image URL</FormLabel>
               <FormControl>
-                <Input placeholder="Enter image URL (optional)" {...field} />
+                <Input id="event-image" placeholder="Enter image URL (optional)" {...field} />
               </FormControl>
               <FormDescription>Provide a URL to an image for your event</FormDescription>
               <FormMessage />
