@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import { EventsProvider } from "./contexts/EventsContext";
 import { TicketsProvider } from "./contexts/TicketsContext";
+import { useMobileDetect } from "./hooks/useMobileDetect";
 
 import Index from "./pages/Index";
 import Login from "./pages/Login";
@@ -17,8 +18,28 @@ import MyTickets from "./pages/MyTickets";
 import OrganizerDashboard from "./pages/OrganizerDashboard";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
+import MobileIndex from "./pages/mobile/MobileIndex";
 
 const queryClient = new QueryClient();
+
+const AppRoutes = () => {
+  const isMobile = useMobileDetect();
+  
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={isMobile ? <MobileIndex /> : <Index />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/events/:id" element={<EventDetails />} />
+        <Route path="/tickets" element={<MyTickets />} />
+        <Route path="/organizer" element={<OrganizerDashboard />} />
+        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -28,18 +49,7 @@ const App = () => (
           <TicketsProvider>
             <Toaster />
             <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/events/:id" element={<EventDetails />} />
-                <Route path="/tickets" element={<MyTickets />} />
-                <Route path="/organizer" element={<OrganizerDashboard />} />
-                <Route path="/admin" element={<AdminPanel />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+            <AppRoutes />
           </TicketsProvider>
         </EventsProvider>
       </AuthProvider>
